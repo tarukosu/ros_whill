@@ -177,6 +177,20 @@ void whillSetJoyMsgCallback(const sensor_msgs::Joy::ConstPtr& joy)
 }
 
 
+void whillCmdVelCallback(const geometry_msgs::Twist::ConstPtr& twist)
+{
+	int joy_side  = twist->angular.z * 100.0f;
+	int joy_front = twist->linear.x * 100.0f;
+
+	// value check
+	if(joy_front < -100) joy_front = -100;
+	if(joy_front > 100)  joy_front = 100;
+	if(joy_side < -100) joy_side = -100;
+	if(joy_side > 100)  joy_side = 100;
+
+	sendJoystick(whill_fd, joy_front, joy_side);
+}
+
 int main(int argc, char **argv)
 {
 	// ROS setup
@@ -195,6 +209,7 @@ int main(int argc, char **argv)
 
 	// Subscribers
 	ros::Subscriber whill_setjoy_sub = nh.subscribe("/whill/controller/joy", 100, whillSetJoyMsgCallback);
+	ros::Subscriber whill_cmd_vel_sub = nh.subscribe("cmd_vel", 100, whillCmdVelCallback);
 
 	initializeComWHILL(&whill_fd,serialport);
 
