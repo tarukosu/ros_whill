@@ -24,6 +24,7 @@ SOFTWARE.
 
 #include "ros/ros.h"
 #include "sensor_msgs/Joy.h"
+#include "geometry_msgs/Twist.h"
 
 #include "ros_whill/srvSetSpeedProfile.h"
 #include "ros_whill/srvSetPower.h"
